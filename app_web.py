@@ -453,35 +453,39 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                 # pm10_val = df['PM10'].iloc[-1]
                 # cuaca_val = df['Cuaca'].iloc[-1]
 
-                # 🔹 C. Mengambil Nilai Tertinggi 7 Harian Otomatis dari Spreadsheet (DataFrame)
-                # Jika Anda menghubungkan Streamlit ke Google Sheets / Excel menggunakan Pandas (misal nama variabelnya `df`):
-                try:
-                        # Mencari nilai tertinggi dalam 7 baris terakhir data
-                        df_7harian = df.tail(7) 
-        
-                        max_pm1_val = df_7harian['PM1'].max()
-                        max_pm25_val = df_7harian['PM2.5'].max()
-                        max_pm10_val = df_7harian['PM10'].max()
-        
-                        # Mencari tanggal kapan nilai tertinggi itu terjadi
-                        tgl_max_pm1 = df_7harian[df_7harian['PM1'] == max_pm1_val]['Tanggal'].iloc[0]
-                        tgl_max_pm25 = df_7harian[df_7harian['PM2.5'] == max_pm25_val]['Tanggal'].iloc[0]
-                        tgl_max_pm10 = df_7harian[df_7harian['PM10'] == max_pm10_val]['Tanggal'].iloc[0]
-        
-                        max_pm1 = f"{max_pm1_val} µgram/m3 tanggal {tgl_max_pm1}"
-                        max_pm25 = f"{max_pm25_val} µgram/m3 tanggal {tgl_max_pm25}"
-                        max_pm10 = f"{max_pm10_val} µgram/m3 tanggal {tgl_max_pm10}"
-                except:
-                        # Cadangan jika variabel dataframe spreadsheet belum terdefinisi / eror
-                        max_pm1 = "40 µgram/m3 tanggal 04 Juli 2026"
-                        max_pm25 = "40 µgram/m3 tanggal 04 Juli 2026"
-                        max_pm10 = "40 µgram/m3 tanggal 04 Juli 2026"
+# 🔹 C. Mengambil Nilai Tertinggi 7 Harian Otomatis dari Spreadsheet (DataFrame)
+try:
+    # Mencari nilai tertinggi dalam 7 baris terakhir data
+    df_7harian = df.tail(7) 
 
-                # 🔹 D. Format Waktu Pengamatan (Bisa disambungkan dari kolom waktu jika ada)
-                        waktu_info_pm1 = hari_h[col_jam_pm1]
-                        waktu_info_pm25 = hari_h[col_jam_pm25]
-                        waktu_info_pm10 = hari_h[col_jam_pm10]
+    max_pm1_val = df_7harian['PM1'].max()
+    max_pm25_val = df_7harian['PM2.5'].max()
+    max_pm10_val = df_7harian['PM10'].max()
 
+    # Mencari tanggal kapan nilai tertinggi itu terjadi
+    tgl_max_pm1 = df_7harian[df_7harian['PM1'] == max_pm1_val]['Tanggal'].iloc[0]
+    tgl_max_pm25 = df_7harian[df_7harian['PM2.5'] == max_pm25_val]['Tanggal'].iloc[0]
+    tgl_max_pm10 = df_7harian[df_7harian['PM10'] == max_pm10_val]['Tanggal'].iloc[0]
+
+    max_pm1 = f"{max_pm1_val} µgram/m3 tanggal {tgl_max_pm1}"
+    max_pm25 = f"{max_pm25_val} µgram/m3 tanggal {tgl_max_pm25}"
+    max_pm10 = f"{max_pm10_val} µgram/m3 tanggal {tgl_max_pm10}"
+    
+    # Masukkan pembacaan waktu di sini agar aman jika dataframe sukses dibaca
+    waktu_info_pm1 = hari_h[col_jam_pm1]
+    waktu_info_pm25 = hari_h[col_jam_pm25]
+    waktu_info_pm10 = hari_h[col_jam_pm10]
+
+except Exception as e:
+    # Cadangan jika variabel dataframe spreadsheet belum terdefinisi / eror
+    max_pm1 = "40 µgram/m3 tanggal 04 Juli 2026"
+    max_pm25 = "40 µgram/m3 tanggal 04 Juli 2026"
+    max_pm10 = "40 µgram/m3 tanggal 04 Juli 2026"
+    
+    # WAJIB berikan nilai cadangan di sini juga agar aplikasi tidak crash!
+    waktu_info_pm1 = "15:00 WITA"
+    waktu_info_pm25 = "15:00 WITA"
+    waktu_info_pm10 = "15:00 WITA"
                 # 🔹 E. Fungsi Otomatis Hitung Kategori ISPU/Partikulat BMKG
                 def hitung_kategori(nilai):
                     try:
