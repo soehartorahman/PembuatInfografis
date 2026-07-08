@@ -449,24 +449,7 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                 # Hapus file grafik temporary
                 for f_temp in [chart_pm10_path, chart_pm25_path, chart_pm1_path]:
                     if os.path.exists(f_temp): os.remove(f_temp)
-
-                # Tampilkan Preview Hasil di Streamlit Web
-                st.success("✨ Infografis Berhasil Dibuat!")
-                st.image(final_img, caption="Live Preview Hasil Infografis (HD)", use_container_width=True)
-                
-                # Tombol Download untuk Admin Web
-                img_byte_arr = io.BytesIO()
-                final_img.save(img_byte_arr, format='PNG')
-                img_byte_arr = img_byte_arr.getvalue()
-
-                st.download_button(
-                    label="💾 DOWNLOAD GAMBAR INFOGRAFIS",
-                    data=img_byte_arr,
-                    file_name=nama_output,
-                    mime="image/png",
-                    use_container_width=True
-                )
-                
+                        
                 st.write("---")
                 st.subheader("📝 Narasi Otomatis untuk WhatsApp")
     
@@ -560,6 +543,7 @@ Salam,
 *Stasiun Pemantau Atmosfer Global Lore Lindu Bariri*"""
                 st.session_state['gambar_infografis'] = img_byte_arr
                 st.session_state['nama_file_infografis'] = nama_output
+                st.toast("✨ Infografis Berhasil Dibuat!")
                 st.session_state['narasi_terformed'] = teks_wa
                 st.info("Klik tombol salin di pojok kanan bawah kotak teks untuk menyalin narasi otomatis.")
                 
@@ -569,4 +553,22 @@ Salam,
 if st.session_state['narasi_terformed'] != "":
     st.subheader("📋 Narasi Infografis (Siap Disalin):")
     st.code(st.session_state['narasi_terformed'], language="text")
+
+if st.session_state['gambar_infografis'] is not None:
+    st.markdown("---")
+    st.subheader("🖼️ Preview Infografis HD:")
+    
+    st.image(
+        st.session_state['gambar_infografis'], 
+        caption="Live Preview Hasil Infografis (HD)", 
+        use_container_width=True
+    )
+    
+    st.download_button(
+        label="💾 DOWNLOAD GAMBAR INFOGRAFIS",
+        data=st.session_state['gambar_infografis'],
+        file_name=st.session_state.get('nama_file_infografis', 'infografis.png'),
+        mime="image/png",
+        use_container_width=True
+    )
 
