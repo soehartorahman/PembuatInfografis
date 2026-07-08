@@ -558,6 +558,9 @@ Salam,
 *Stasiun Pemantau Atmosfer Global Lore Lindu Bariri*"""
                 st.session_state['narasi_terformed'] = teks_wa
                 st.info("Klik tombol salin di pojok kanan bawah kotak teks untuk menyalin narasi otomatis.")
-                st.code(teks_wa, language="text")
+                
             except Exception as e:
                 st.error(f"Terjadi Kendala Sistem:\n{str(e)}")
+if st.session_state['narasi_terformed'] != "":
+    st.subheader("📋 Narasi Infografis (Siap Disalin):")
+    st.code(st.session_state['narasi_terformed'], language="text")
