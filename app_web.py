@@ -482,11 +482,13 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
     
                 # 🔹 C. Mengambil Nilai Tertinggi 7 Harian & Waktu Pengamatan Berdasarkan Waktu yang Ditambah 10 Menit (+10)
                 try:
-                    df_7harian = df.tail(7).copy()
-                    
-                    df_7harian['PM1'] = pd.to_numeric(df_7harian['PM1'], errors='coerce')
-                    df_7harian['PM2.5'] = pd.to_numeric(df_7harian['PM2.5'], errors='coerce')
-                    df_7harian['PM10'] = pd.to_numeric(df_7harian['PM10'], errors='coerce')
+                    df['PM1'] = pd.to_numeric(df['PM1'], errors='coerce')
+                    df['PM2.5'] = pd.to_numeric(df['PM2.5'], errors='coerce')
+                    df['PM10'] = pd.to_numeric(df['PM10'], errors='coerce')
+
+                    df_bersih = df.dropna(subset=['PM1', 'Tanggal'])
+
+                    df_7harian = df_bersih.tail(7).copy()
     
                     max_pm1_val = df_7harian['PM1'].max()
                     max_pm25_val = df_7harian['PM2.5'].max()
