@@ -305,6 +305,8 @@ def hitung_kategori_pm10(nilai):
 # ==========================================
 if 'narasi_terformed' not in st.session_state:
     st.session_state['narasi_terformed'] = ""
+if 'gambar_infografis' not in st.session_state:
+    st.session_state['gambar_infografis'] = None
 
 st.markdown("---")
 if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_width=True):
@@ -556,6 +558,8 @@ PM10 = {max_pm10}
 Salam,
 
 *Stasiun Pemantau Atmosfer Global Lore Lindu Bariri*"""
+                st.session_state['gambar_infografis'] = img_byte_arr
+                st.session_state['nama_file_infografis'] = nama_output
                 st.session_state['narasi_terformed'] = teks_wa
                 st.info("Klik tombol salin di pojok kanan bawah kotak teks untuk menyalin narasi otomatis.")
                 
@@ -564,3 +568,19 @@ Salam,
 if st.session_state['narasi_terformed'] != "":
     st.subheader("📋 Narasi Infografis (Siap Disalin):")
     st.code(st.session_state['narasi_terformed'], language="text")
+
+if st.session_state['gambar_infografis'] is not None:
+    st.markdown("---")
+    st.subheader("🖼️ Preview Infografis HD:")
+    
+    # Tampilkan preview menggunakan bytes gambar yang tersimpan
+    st.image(st.session_state['gambar_infografis'], caption="Live Preview Hasil Infografis (HD)", use_container_width=True)
+    
+    # Tombol download mandiri
+    st.download_button(
+        label="💾 DOWNLOAD GAMBAR INFOGRAFIS",
+        data=st.session_state['gambar_infografis'],
+        file_name=st.session_state.get('nama_file_infografis', 'infografis.png'),
+        mime="image/png",
+        use_container_width=True
+    )
