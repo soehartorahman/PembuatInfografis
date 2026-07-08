@@ -566,22 +566,6 @@ Salam,
             except Exception as e:
                 st.error(f"Terjadi Kendala Sistem:\n{str(e)}")
 
-if st.session_state['gambar_infografis'] is not None:
-    st.markdown("---")
-    st.subheader("🖼️ Preview Infografis HD:")
-    
-    # Tampilkan preview menggunakan bytes gambar yang tersimpan
-    st.image(st.session_state['gambar_infografis'], caption="Live Preview Hasil Infografis (HD)", use_container_width=True)
-    
-    # Tombol download mandiri
-    st.download_button(
-        label="💾 DOWNLOAD GAMBAR INFOGRAFIS",
-        data=st.session_state['gambar_infografis'],
-        file_name=st.session_state.get('nama_file_infografis', 'infografis.png'),
-        mime="image/png",
-        use_container_width=True
-    )
-
 if st.session_state['narasi_terformed'] != "":
     st.subheader("📋 Narasi Infografis (Siap Disalin):")
     st.code(st.session_state['narasi_terformed'], language="text")
