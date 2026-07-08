@@ -449,6 +449,10 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                 # Hapus file grafik temporary
                 for f_temp in [chart_pm10_path, chart_pm25_path, chart_pm1_path]:
                     if os.path.exists(f_temp): os.remove(f_temp)
+
+                img_byte_arr = io.BytesIO()
+                final_img.save(img_byte_arr, format='PNG')
+                img_byte_arr = img_byte_arr.getvalue()
                         
                 st.write("---")
                 st.subheader("📝 Narasi Otomatis untuk WhatsApp")
