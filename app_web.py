@@ -498,9 +498,9 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                     tgl_max_pm25 = df_7harian.loc[df_7harian['PM2.5'].idxmax(), 'Tanggal']
                     tgl_max_pm10 = df_7harian.loc[df_7harian['PM10'].idxmax(), 'Tanggal']
     
-                    max_pm1 = f"{max_pm1_val} µgram/m3 tanggal {tgl_max_pm1}"
-                    max_pm25 = f"{max_pm25_val} µgram/m3 tanggal {tgl_max_pm25}"
-                    max_pm10 = f"{max_pm10_val} µgram/m3 tanggal {tgl_max_pm10}"
+                    max_pm1 = f"{int(max_pm1_val)} µgram/m3 tanggal {tgl_max_pm1}"
+                    max_pm25 = f"{int(max_pm25_val)} µgram/m3 tanggal {tgl_max_pm25}"
+                    max_pm10 = f"{int(max_pm10_val)} µgram/m3 tanggal {tgl_max_pm10}"
                     
                     # Konversi otomatis ke format +10 menit dengan WITA
                     waktu_info_pm1 = format_jam_otomatis(hari_h[col_jam_pm1])
@@ -511,9 +511,9 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                     st.error(f"Blok TRY gagal karena error: {e}")
                     st.code(traceback.format_exc())
                     
-                    max_pm1 = f"{pm1_val} µgram/m3 tanggal {hari_h[col_tanggal]}"
-                    max_pm25 = f"{pm25_val} µgram/m3 tanggal {hari_h[col_tanggal]}"
-                    max_pm10 = f"{pm10_val} µgram/m3 tanggal {hari_h[col_tanggal]}"
+                    max_pm1 = f"{int(pm1_val)} µgram/m3 tanggal {hari_h[col_tanggal]}"
+                    max_pm25 = f"{int(pm25_val)} µgram/m3 tanggal {hari_h[col_tanggal]}"
+                    max_pm10 = f"{int(pm10_val)} µgram/m3 tanggal {hari_h[col_tanggal]}"
                     
                     waktu_info_pm1 = format_jam_otomatis("15:00")
                     waktu_info_pm25 = format_jam_otomatis("15:00")
