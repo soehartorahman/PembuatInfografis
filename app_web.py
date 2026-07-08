@@ -475,9 +475,9 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                 tgl_info = f"{hari_id}, {waktu_sekarang.day:02d} {bulan_id} {waktu_sekarang.year}"
     
                 # 🔹 B. Mengambil Nilai Riil PM & Cuaca dari baris terakhir DataFrame
-                pm1_val = hari_h[col_pm1]
-                pm25_val = hari_h[col_pm25]
-                pm10_val = hari_h[col_pm10]
+                pm1_val = int(hari_h[col_pm1])
+                pm25_val = int(hari_h[col_pm25])
+                pm10_val = int(hari_h[col_pm10])
                 cuaca_val = hari_h[col_cuaca]
     
                 # 🔹 C. Mengambil Nilai Tertinggi 7 Harian & Waktu Pengamatan Berdasarkan Waktu yang Ditambah 10 Menit (+10)
