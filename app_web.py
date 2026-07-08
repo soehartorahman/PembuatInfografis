@@ -484,6 +484,13 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
 
                 # 🔹 E. Fungsi Otomatis Hitung Kategori ISPU/Partikulat BMKG
                 def hitung_kategori(nilai):
+                    try:
+                        # Mengubah paksa tipe data menjadi angka bulat
+                        nilai = int(nilai) 
+                    except (ValueError, TypeError):
+                        # Jika datanya kosong, striping, atau bukan angka, kembalikan teks strip
+                        return "Data Belum Terisi"
+                        
                     if nilai <= 50:
                         return "Baik"
                     elif nilai <= 100:
