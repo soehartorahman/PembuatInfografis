@@ -303,6 +303,9 @@ def hitung_kategori_pm10(nilai):
 # ==========================================
 # 4. AKSI GENERATOR (TOMBOL EKSEKUSI)
 # ==========================================
+if 'narasi_terformed' not in st.session_state:
+    st.session_state['narasi_terformed'] = ""
+
 st.markdown("---")
 if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_width=True):
     if not os.path.exists(BG_FILE):
@@ -553,7 +556,7 @@ PM10 = {max_pm10}
 Salam,
 
 *Stasiun Pemantau Atmosfer Global Lore Lindu Bariri*"""
-
+                st.session_state['narasi_terformed'] = teks_wa
                 st.info("Klik tombol salin di pojok kanan bawah kotak teks untuk menyalin narasi otomatis.")
                 st.code(teks_wa, language="text")
             except Exception as e:
