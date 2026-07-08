@@ -478,9 +478,9 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                         max_pm10 = "40 µgram/m3 tanggal 04 Juli 2026"
 
                 # 🔹 D. Format Waktu Pengamatan (Bisa disambungkan dari kolom waktu jika ada)
-                        waktu_info = """Pukul 15:00 - 15:10 WITA
-                                      PM2.5  Pukul 14:22 - 14:32 WITA
-                                      PM10 Pukul 14:40 - 14:50 WITA"""
+                        waktu_info_pm1 = hari_h[col_jam_pm1]
+                        waktu_info_pm25 = hari_h[col_jam_pm25]
+                        waktu_info_pm10 = hari_h[col_jam_pm10]
 
                 # 🔹 E. Fungsi Otomatis Hitung Kategori ISPU/Partikulat BMKG
                 def hitung_kategori(nilai):
@@ -507,7 +507,9 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                 teks_wa = f"""Informasi Kualitas Udara Kota Palu Harian
 
                         🗓️ {tgl_info}
-                        🕑 PM1 {waktu_info}
+                        🕑 PM1 {waktu_info_pm1}
+                           PM2.5 {waktu_info_pm25}
+                           PM10 {waktu_info_pm10}
                         🏠 Jl. Sapta Marga, Kel. Birobuli Utara, Kec. Palu Selatan
 
                         Hasil pemantauan kualitas udara partikulat sebagai berikut:
