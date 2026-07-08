@@ -565,9 +565,6 @@ Salam,
                 
             except Exception as e:
                 st.error(f"Terjadi Kendala Sistem:\n{str(e)}")
-if st.session_state['narasi_terformed'] != "":
-    st.subheader("📋 Narasi Infografis (Siap Disalin):")
-    st.code(st.session_state['narasi_terformed'], language="text")
 
 if st.session_state['gambar_infografis'] is not None:
     st.markdown("---")
@@ -584,3 +581,8 @@ if st.session_state['gambar_infografis'] is not None:
         mime="image/png",
         use_container_width=True
     )
+
+if st.session_state['narasi_terformed'] != "":
+    st.subheader("📋 Narasi Infografis (Siap Disalin):")
+    st.code(st.session_state['narasi_terformed'], language="text")
+
