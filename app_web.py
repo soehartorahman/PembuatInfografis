@@ -526,7 +526,7 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                         Stasiun Pemantau Atmosfer Global Lore Lindu Bariri"""
 
                         # TAMPILKAN DI LAYAR DENGAN TOMBOL SALIN
-                        st.info("Klik tombol salin di pojok kanan bawah kotak teks untuk menyalin narasi otomatis.")
-                        st.code(teks_wa, language="text")
+            st.info("Klik tombol salin di pojok kanan bawah kotak teks untuk menyalin narasi otomatis.")
+            st.code(teks_wa, language="text")
             except Exception as e:
                 st.error(f"Terjadi Kendala Sistem:\n{str(e)}")
