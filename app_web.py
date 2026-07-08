@@ -482,15 +482,19 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
     
                 # 🔹 C. Mengambil Nilai Tertinggi 7 Harian & Waktu Pengamatan Berdasarkan Waktu yang Ditambah 10 Menit (+10)
                 try:
-                    df_7harian = df.tail(7) 
+                    df_7harian = df.tail(7).copy()
+                    
+                    df_7harian['PM1'] = pd.to_numeric(df_7harian['PM1'], errors='coerce')
+                    df_7harian['PM2.5'] = pd.to_numeric(df_7harian['PM2.5'], errors='coerce')
+                    df_7harian['PM10'] = pd.to_numeric(df_7harian['PM10'], errors='coerce')
     
                     max_pm1_val = df_7harian['PM1'].max()
                     max_pm25_val = df_7harian['PM2.5'].max()
                     max_pm10_val = df_7harian['PM10'].max()
     
-                    tgl_max_pm1 = df_7harian[df_7harian['PM1'] == max_pm1_val]['Tanggal'].iloc[0]
-                    tgl_max_pm25 = df_7harian[df_7harian['PM2.5'] == max_pm25_val]['Tanggal'].iloc[0]
-                    tgl_max_pm10 = df_7harian[df_7harian['PM10'] == max_pm10_val]['Tanggal'].iloc[0]
+                    tgl_max_pm1 = df_7harian.loc[df_7harian['PM1'].idxmax(), 'Tanggal']
+                    tgl_max_pm25 = df_7harian.loc[df_7harian['PM2.5'].idxmax(), 'Tanggal']
+                    tgl_max_pm10 = df_7harian.loc[df_7harian['PM10'].idxmax(), 'Tanggal']
     
                     max_pm1 = f"{max_pm1_val} µgram/m3 tanggal {tgl_max_pm1}"
                     max_pm25 = f"{max_pm25_val} µgram/m3 tanggal {tgl_max_pm25}"
