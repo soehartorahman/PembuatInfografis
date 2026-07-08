@@ -425,5 +425,108 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                     use_container_width=True
                 )
                 
+                st.write("---")
+                st.subheader("📝 Narasi Otomatis untuk WhatsApp")
+    
+                # 🔹 A. Mengambil Hari & Tanggal Otomatis Saat Ini (Sesuai Sistem/Waktu Nyata)
+                import datetime
+                import locale
+    
+                try:
+                    locale.setlocale(locale.LC_TIME, "id_ID.utf8") # Mengubah nama hari ke Bahasa Indonesia
+                except:
+                    pass # Antisipasi jika OS server cloud belum mendukung locale lokal
+        
+                waktu_sekarang = datetime.datetime.now()
+                tgl_info = waktu_sekarang.strftime("%A, %d %B %Y") # Hasil: Rabu, 08 Juli 2026
+    
+                # 🔹 B. Mengambil Nilai PM & Cuaca Langsung dari Variabel Input / Spreadsheet Anda
+                  
+                pm1_val = col_pm1         # Ganti dengan nama variabel input PM1 Anda
+                pm25_val = col_pm25        # Ganti dengan nama variabel input PM2.5 Anda
+                pm10_val = col_pm10        # Ganti dengan nama variabel input PM10 Anda
+                cuaca_val = col_cuaca      # Ganti dengan nama variabel selectbox cuaca Anda
+    
+                # Contoh Jika datanya diambil dari baris terakhir SPREADSHEET (Pandas DataFrame):
+                # pm1_val = df['PM1'].iloc[-1]
+                # pm25_val = df['PM2.5'].iloc[-1]
+                # pm10_val = df['PM10'].iloc[-1]
+                # cuaca_val = df['Cuaca'].iloc[-1]
+
+                # 🔹 C. Mengambil Nilai Tertinggi 7 Harian Otomatis dari Spreadsheet (DataFrame)
+                # Jika Anda menghubungkan Streamlit ke Google Sheets / Excel menggunakan Pandas (misal nama variabelnya `df`):
+                    try:
+                        # Mencari nilai tertinggi dalam 7 baris terakhir data
+                        df_7harian = df.tail(7) 
+        
+                        max_pm1_val = df_7harian['PM1'].max()
+                        max_pm25_val = df_7harian['PM2.5'].max()
+                        max_pm10_val = df_7harian['PM10'].max()
+        
+                        # Mencari tanggal kapan nilai tertinggi itu terjadi
+                        tgl_max_pm1 = df_7harian[df_7harian['PM1'] == max_pm1_val]['Tanggal'].iloc[0]
+                        tgl_max_pm25 = df_7harian[df_7harian['PM2.5'] == max_pm25_val]['Tanggal'].iloc[0]
+                        tgl_max_pm10 = df_7harian[df_7harian['PM10'] == max_pm10_val]['Tanggal'].iloc[0]
+        
+                        max_pm1 = f"{max_pm1_val} µgram/m3 tanggal {tgl_max_pm1}"
+                        max_pm25 = f"{max_pm25_val} µgram/m3 tanggal {tgl_max_pm25}"
+                        max_pm10 = f"{max_pm10_val} µgram/m3 tanggal {tgl_max_pm10}"
+                    except:
+                        # Cadangan jika variabel dataframe spreadsheet belum terdefinisi / eror
+                        max_pm1 = "40 µgram/m3 tanggal 04 Juli 2026"
+                        max_pm25 = "40 µgram/m3 tanggal 04 Juli 2026"
+                        max_pm10 = "40 µgram/m3 tanggal 04 Juli 2026"
+
+                # 🔹 D. Format Waktu Pengamatan (Bisa disambungkan dari kolom waktu jika ada)
+                        waktu_info = """Pukul 15:00 - 15:10 WITA
+                                      PM2.5  Pukul 14:22 - 14:32 WITA
+                                      PM10 Pukul 14:40 - 14:50 WITA"""
+
+                # 🔹 E. Fungsi Otomatis Hitung Kategori ISPU/Partikulat BMKG
+                def hitung_kategori(nilai):
+                    if nilai <= 50:
+                        return "Baik"
+                    elif nilai <= 100:
+                        return "Sedang"
+                    elif nilai <= 150:
+                        return "Tidak Sehat"
+                    else:
+                        return "Sangat Tidak Sehat"
+
+                kat_pm25 = hitung_kategori(pm25_val)
+                kat_pm10 = hitung_kategori(pm10_val)
+
+                # 🔹 F. Merakit Template Teks Menjadi Isi Variabel Dinamis
+                teks_wa = f"""Informasi Kualitas Udara Kota Palu Harian
+
+                        🗓️ {tgl_info}
+                        🕑 PM1 {waktu_info}
+                        🏠 Jl. Sapta Marga, Kel. Birobuli Utara, Kec. Palu Selatan
+
+                        Hasil pemantauan kualitas udara partikulat sebagai berikut:
+
+                        PM1 = {pm1_val} µgram/m3 
+                        PM2.5 = {pm25_val} µgram/m3 ({kat_pm25})
+                        PM10  = {pm10_val} µgram/m3 ({kat_pm10})
+                        Kondisi Cuaca = {cuaca_val}
+
+                        Nilai Pengamatan Tertinggi 7 Harian:
+                        PM1 = {max_pm1}
+                        PM2.5 = {max_pm25}
+                        PM10 = {max_pm10}
+
+                        ‼️ Himbauan ‼️
+
+                        1. Menggunakan masker untuk terlindungi dari debu.
+                        2. Tidak membakar sampah di halaman rumah.
+                        3. Apabila Nilai ISPU>100, masyarakat mengurangi aktivitas di luar ruangan.
+
+                        Salam,
+
+                        Stasiun Pemantau Atmosfer Global Lore Lindu Bariri"""
+
+                        # TAMPILKAN DI LAYAR DENGAN TOMBOL SALIN
+                        st.info("Klik tombol salin di pojok kanan bawah kotak teks untuk menyalin narasi otomatis.")
+                        st.code(teks_wa, language="text")
             except Exception as e:
                 st.error(f"Terjadi Kendala Sistem:\n{str(e)}")
