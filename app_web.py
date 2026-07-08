@@ -504,7 +504,11 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                     waktu_info_pm1 = format_jam_otomatis(hari_h[col_jam_pm1])
                     waktu_info_pm25 = format_jam_otomatis(hari_h[col_jam_pm25])
                     waktu_info_pm10 = format_jam_otomatis(hari_h[col_jam_pm10])
-                except Exception:
+                except Exception as e:
+                    import traceback
+                    st.error(f"Blok TRY gagal karena error: {e}")
+                    st.code(traceback.format_exc())
+                    
                     max_pm1 = f"{pm1_val} µgram/m3 tanggal {hari_h[col_tanggal]}"
                     max_pm25 = f"{pm25_val} µgram/m3 tanggal {hari_h[col_tanggal]}"
                     max_pm10 = f"{pm10_val} µgram/m3 tanggal {hari_h[col_tanggal]}"
