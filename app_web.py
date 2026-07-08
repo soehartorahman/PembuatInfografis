@@ -264,9 +264,28 @@ def draw_justified_himbauan_dynamic(draw, text, start_x, start_y, max_width, max
             curr_x += draw.textbbox((0, 0), text_val, font=f_type)[2]
         curr_y += line_h + 12
 
-def hitung_kategori(nilai):
+# Fungsi Hitung Kategori Khusus PM2.5 (Standar BMKG Terbaru)
+def hitung_kategori_pm25(nilai):
     try:
-        nilai = int(nilai) 
+        nilai = float(nilai) 
+    except (ValueError, TypeError):
+        return "Data Belum Terisi"
+        
+    if nilai <= 15.5:
+        return "Baik"
+    elif nilai <= 55.4:
+        return "Sedang"
+    elif nilai <= 150.4:
+        return "Tidak Sehat"
+    elif nilai <= 250.4:
+        return "Sangat Tidak Sehat"
+    else:
+        return "Berbahaya"
+
+# Fungsi Hitung Kategori Khusus PM10 (Standar ISPU KLHK/BMKG)
+def hitung_kategori_pm10(nilai):
+    try:
+        nilai = float(nilai) 
     except (ValueError, TypeError):
         return "Data Belum Terisi"
         
@@ -276,8 +295,10 @@ def hitung_kategori(nilai):
         return "Sedang"
     elif nilai <= 150:
         return "Tidak Sehat"
-    else:
+    elif nilai <= 300:
         return "Sangat Tidak Sehat"
+    else:
+        return "Berbahaya"
 
 # ==========================================
 # 4. AKSI GENERATOR (TOMBOL EKSEKUSI)
@@ -444,14 +465,14 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                 st.write("---")
                 st.subheader("📝 Narasi Otomatis untuk WhatsApp")
     
-                # 🔹 A. Mengambil Hari & Tanggal Otomatis Saat Ini
-                try:
-                    locale.setlocale(locale.LC_TIME, "id_ID.utf8")
-                except:
-                    pass
-        
+                # 🔹 A. Mengambil Hari & Tanggal Otomatis Saat Ini dalam Bahasa Indonesia
+                nama_hari = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"]
+                nama_bulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+                
                 waktu_sekarang = datetime.datetime.now()
-                tgl_info = waktu_sekarang.strftime("%A, %d %B %Y")
+                hari_id = nama_hari[waktu_sekarang.weekday()]
+                bulan_id = nama_bulan[waktu_sekarang.month]
+                tgl_info = f"{hari_id}, {waktu_sekarang.day:02d} {bulan_id} {waktu_sekarang.year}"
     
                 # 🔹 B. Mengambil Nilai Riil PM & Cuaca dari baris terakhir DataFrame
                 pm1_val = hari_h[col_pm1]
@@ -459,7 +480,7 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                 pm10_val = hari_h[col_pm10]
                 cuaca_val = hari_h[col_cuaca]
     
-                # 🔹 C. Mengambil Nilai Tertinggi 7 Harian & Waktu Pengamatan Berdasarkan Blok Struktur Aman
+                # 🔹 C. Mengambil Nilai Tertinggi 7 Harian & Waktu Pengamatan Berdasarkan Waktu yang Ditambah 10 Menit (+10)
                 try:
                     df_7harian = df.tail(7) 
     
@@ -475,28 +496,30 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                     max_pm25 = f"{max_pm25_val} µgram/m3 tanggal {tgl_max_pm25}"
                     max_pm10 = f"{max_pm10_val} µgram/m3 tanggal {tgl_max_pm10}"
                     
-                    waktu_info_pm1 = hari_h[col_jam_pm1]
-                    waktu_info_pm25 = hari_h[col_jam_pm25]
-                    waktu_info_pm10 = hari_h[col_jam_pm10]
+                    # Konversi otomatis ke format +10 menit dengan WITA
+                    waktu_info_pm1 = format_jam_otomatis(hari_h[col_jam_pm1])
+                    waktu_info_pm25 = format_jam_otomatis(hari_h[col_jam_pm25])
+                    waktu_info_pm10 = format_jam_otomatis(hari_h[col_jam_pm10])
                 except Exception:
                     max_pm1 = f"{pm1_val} µgram/m3 tanggal {hari_h[col_tanggal]}"
                     max_pm25 = f"{pm25_val} µgram/m3 tanggal {hari_h[col_tanggal]}"
                     max_pm10 = f"{pm10_val} µgram/m3 tanggal {hari_h[col_tanggal]}"
                     
-                    waktu_info_pm1 = "15:00"
-                    waktu_info_pm25 = "15:00"
-                    waktu_info_pm10 = "15:00"
+                    waktu_info_pm1 = format_jam_otomatis("15:00")
+                    waktu_info_pm25 = format_jam_otomatis("15:00")
+                    waktu_info_pm10 = format_jam_otomatis("15:00")
 
-                kat_pm25 = hitung_kategori(pm25_val)
-                kat_pm10 = hitung_kategori(pm10_val)
+                # Memisahkan kategori perhitungan logika khusus masing-masing parameter
+                kat_pm25 = hitung_kategori_pm25(pm25_val)
+                kat_pm10 = hitung_kategori_pm10(pm10_val)
 
                 # 🔹 F. Merakit Template Teks WhatsApp
                 teks_wa = f"""Informasi Kualitas Udara Kota Palu Harian
 
 🗓️ {tgl_info}
-🕑 PM1 {waktu_info_pm1} WITA
-   PM2.5 {waktu_info_pm25} WITA
-   PM10 {waktu_info_pm10} WITA
+🕑 PM1: {waktu_info_pm1}
+   PM2.5: {waktu_info_pm25}
+   PM10: {waktu_info_pm10}
 🏠 Jl. Sapta Marga, Kel. Birobuli Utara, Kec. Palu Selatan
 
 Hasil pemantauan kualitas udara partikulat sebagai berikut:
