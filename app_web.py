@@ -455,7 +455,7 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
 
                 # 🔹 C. Mengambil Nilai Tertinggi 7 Harian Otomatis dari Spreadsheet (DataFrame)
                 # Jika Anda menghubungkan Streamlit ke Google Sheets / Excel menggunakan Pandas (misal nama variabelnya `df`):
-                    try:
+                try:
                         # Mencari nilai tertinggi dalam 7 baris terakhir data
                         df_7harian = df.tail(7) 
         
@@ -471,7 +471,7 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                         max_pm1 = f"{max_pm1_val} µgram/m3 tanggal {tgl_max_pm1}"
                         max_pm25 = f"{max_pm25_val} µgram/m3 tanggal {tgl_max_pm25}"
                         max_pm10 = f"{max_pm10_val} µgram/m3 tanggal {tgl_max_pm10}"
-                    except:
+                 except:
                         # Cadangan jika variabel dataframe spreadsheet belum terdefinisi / eror
                         max_pm1 = "40 µgram/m3 tanggal 04 Juli 2026"
                         max_pm25 = "40 µgram/m3 tanggal 04 Juli 2026"
