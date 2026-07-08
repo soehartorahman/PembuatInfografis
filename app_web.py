@@ -514,7 +514,7 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                 kat_pm10 = hitung_kategori_pm10(pm10_val)
 
                 # 🔹 F. Merakit Template Teks WhatsApp
-                teks_wa = f"""Informasi Kualitas Udara Kota Palu Harian
+                teks_wa = f"""*Informasi Kualitas Udara Kota Palu Harian*
 
 🗓️ {tgl_info}
 🕑 PM1: {waktu_info_pm1}
@@ -525,9 +525,9 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
 Hasil pemantauan kualitas udara partikulat sebagai berikut:
 
 PM1 = {pm1_val} µgram/m3 
-PM2.5 = {pm25_val} µgram/m3 ({kat_pm25})
-PM10  = {pm10_val} µgram/m3 ({kat_pm10})
-Kondisi Cuaca = {cuaca_val}
+PM2.5 = {pm25_val} µgram/m3 (*{kat_pm25}*)
+PM10  = {pm10_val} µgram/m3 (*{kat_pm10}*)
+Kondisi Cuaca = *{cuaca_val}*
 
 Nilai Pengamatan Tertinggi 7 Harian:
 PM1 = {max_pm1}
@@ -542,7 +542,7 @@ PM10 = {max_pm10}
 
 Salam,
 
-Stasiun Pemantau Atmosfer Global Lore Lindu Bariri"""
+*Stasiun Pemantau Atmosfer Global Lore Lindu Bariri*"""
 
                 st.info("Klik tombol salin di pojok kanan bawah kotak teks untuk menyalin narasi otomatis.")
                 st.code(teks_wa, language="text")
