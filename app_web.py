@@ -149,7 +149,7 @@ def buat_grafik_conditional(df, col_name, batas_nilai, warna_list, output_name):
 
     ax.set_xticks(x)
     ax.set_xticklabels(dates, fontsize=9)
-    ax.set_xlabel("Tanggal Pengukuran", fontsize=10, weight='bold', labelpad=5)
+    ax.set_xlabel("Tanggal Pengukuran", fontsize=8, weight='bold', labelpad=5)
     ax.set_ylabel("Hasil Pengukuran (µg/m3)", fontsize=9, weight='bold', labelpad=5)
     ax.set_ylim(0, max_y_val + (max_y_val * 0.25))
     ax.grid(axis='y', linestyle='--', alpha=0.5)
