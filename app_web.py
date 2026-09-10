@@ -99,7 +99,19 @@ def buat_grafik_conditional(df, col_name, batas_nilai, warna_list, output_name):
     
     x = np.arange(len(df_7))
     y = df_7[col_name].astype(float).values
-    dates = df_7['Tanggal'].values
+    
+    # --- PROSES FORMAT TANGGAL & BULAN ---
+    dates_raw = df_7['Tanggal'].values
+    day_labels = []
+    month_year_text = ""
+
+    for d in dates_raw:
+        parts = str(d).strip().split()
+        # Mengambil angka tanggal saja untuk sumbu X (contoh: "4")
+        day_labels.append(parts[0]) 
+        # Mengambil bulan dan tahun (contoh: "September 2026")
+        if len(parts) >= 2 and not month_year_text:
+            month_year_text = " ".join(parts[1:])
 
     fig, ax = plt.subplots(figsize=(7, 2.775), dpi=300)
     fig.patch.set_alpha(0.0)
@@ -147,9 +159,14 @@ def buat_grafik_conditional(df, col_name, batas_nilai, warna_list, output_name):
         ax.scatter(x[idx], val, color=pt_color, edgecolor='black', s=90, zorder=3)
         ax.text(x[idx], val + (max_y_val * 0.05), f"{int(val)}", ha='center', va='bottom', fontsize=11, weight='bold', color='black')
 
+    # --- PENGATURAN SUMBU X AGAR TIDAK BERTUMPUK ---
     ax.set_xticks(x)
-    ax.set_xticklabels(dates, fontsize=7)
-    ax.set_xlabel("Tanggal Pengukuran", fontsize=11, weight='bold', labelpad=5)
+    ax.set_xticklabels(day_labels, fontsize=10, weight='bold') # Menampilkan hanya angka tanggal
+    
+    # Menampilkan Bulan dan Tahun di bawah sumbu X
+    xlabel_text = f"Tanggal Pengukuran ({month_year_text})" if month_year_text else "Tanggal Pengukuran"
+    ax.set_xlabel(xlabel_text, fontsize=10, weight='bold', labelpad=6)
+    
     ax.set_ylabel("Hasil Pengukuran (µg/m3)", fontsize=9, weight='bold', labelpad=5)
     ax.set_ylim(0, max_y_val + (max_y_val * 0.25))
     ax.grid(axis='y', linestyle='--', alpha=0.5)
