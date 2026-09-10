@@ -164,7 +164,11 @@ def buat_grafik_conditional(df, col_name, batas_nilai, warna_list, output_name):
     ax.set_xticklabels(day_labels, fontsize=10, weight='bold') # Menampilkan hanya angka tanggal
     
     # Menampilkan Bulan dan Tahun di bawah sumbu X
-    xlabel_text = f"Tanggal Pengukuran ({month_year_text})" if month_year_text else "Tanggal Pengukuran"
+    if month_year_text:
+        xlabel_text = f"{month_year_text}\nTanggal Pengukuran"
+    else:
+        xlabel_text = "Tanggal Pengukuran"
+        
     ax.set_xlabel(xlabel_text, fontsize=10, weight='bold', labelpad=6)
     
     ax.set_ylabel("Hasil Pengukuran (µg/m3)", fontsize=9, weight='bold', labelpad=5)
