@@ -26,7 +26,7 @@ st.markdown("---")
 
 # Direktori Dasar Aset
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-BG_FILE = os.path.join(BASE_DIR, "background.png")
+BG_FILE = os.path.join(BASE_DIR, "background10th.png")
 FOLDER_ICON = os.path.join(BASE_DIR, "icons_cuaca")
 FOLDER_FONT = os.path.join(BASE_DIR, "fonts")
 
