@@ -100,18 +100,42 @@ def buat_grafik_conditional(df, col_name, batas_nilai, warna_list, output_name):
     x = np.arange(len(df_7))
     y = df_7[col_name].astype(float).values
     
-    # --- PROSES FORMAT TANGGAL & BULAN ---
-    dates_raw = df_7['Tanggal'].values
-    day_labels = []
-    month_year_text = ""
+    # -------------------------------------------------------------
+    # PEMROSESAN TANGGAL KHUSUS FORMAT INDONESIA ("1 Oktober 2026")
+    # -------------------------------------------------------------
+    bulan_id = {
+        'januari': 1, 'februari': 2, 'maret': 3, 'april': 4,
+        'mei': 5, 'juni': 6, 'juli': 7, 'agustus': 8,
+        'september': 9, 'oktober': 10, 'november': 11, 'desember': 12
+    }
+    bulan_singkat = {
+        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'Mei', 6: 'Jun',
+        7: 'Jul', 8: 'Agu', 9: 'Sep', 10: 'Okt', 11: 'Nov', 12: 'Des'
+    }
 
-    for d in dates_raw:
-        parts = str(d).strip().split()
-        # Mengambil angka tanggal saja untuk sumbu X (contoh: "4")
-        day_labels.append(parts[0]) 
-        # Mengambil bulan dan tahun (contoh: "September 2026")
-        if len(parts) >= 2 and not month_year_text:
-            month_year_text = " ".join(parts[1:])
+    parsed_dates = []
+    for tgl_str in df_7['Tanggal']:
+        tgl_clean = str(tgl_str).strip()
+        parts = tgl_clean.split()
+        if len(parts) >= 2:
+            day = parts[0]
+            month_str = parts[1].lower()
+            month_num = bulan_id.get(month_str, None)
+            parsed_dates.append({'day': day, 'month_num': month_num, 'raw': tgl_clean})
+        else:
+            parsed_dates.append({'day': tgl_clean, 'month_num': None, 'raw': tgl_clean})
+
+    # Cek apakah dalam 7 hari terdapat lebih dari 1 bulan berbeda
+    months_in_7 = set(p['month_num'] for p in parsed_dates if p['month_num'] is not None)
+    
+    formatted_dates = []
+    for p in parsed_dates:
+        # Jika ada pergantian bulan (misal September -> Oktober), tampilkan "25 Sep", "1 Okt"
+        if len(months_in_7) > 1 and p['month_num'] is not None:
+            formatted_dates.append(f"{p['day']} {bulan_singkat.get(p['month_num'], '')}")
+        else:
+            formatted_dates.append(p['day'])
+    # -------------------------------------------------------------
 
     fig, ax = plt.subplots(figsize=(7, 2.775), dpi=300)
     fig.patch.set_alpha(0.0)
@@ -159,18 +183,9 @@ def buat_grafik_conditional(df, col_name, batas_nilai, warna_list, output_name):
         ax.scatter(x[idx], val, color=pt_color, edgecolor='black', s=90, zorder=3)
         ax.text(x[idx], val + (max_y_val * 0.05), f"{int(val)}", ha='center', va='bottom', fontsize=11, weight='bold', color='black')
 
-    # --- PENGATURAN SUMBU X AGAR TIDAK BERTUMPUK ---
     ax.set_xticks(x)
-    ax.set_xticklabels(day_labels, fontsize=10, weight='bold') # Menampilkan hanya angka tanggal
-    
-    # Menampilkan Bulan dan Tahun di bawah sumbu X
-    if month_year_text:
-        xlabel_text = f"{month_year_text}\nTanggal Pengukuran"
-    else:
-        xlabel_text = "Tanggal Pengukuran"
-        
-    ax.set_xlabel(xlabel_text, fontsize=10, weight='bold', labelpad=6)
-    
+    ax.set_xticklabels(formatted_dates, fontsize=7)
+    ax.set_xlabel("Tanggal Pengukuran", fontsize=11, weight='bold', labelpad=5)
     ax.set_ylabel("Hasil Pengukuran (µg/m3)", fontsize=9, weight='bold', labelpad=5)
     ax.set_ylim(0, max_y_val + (max_y_val * 0.25))
     ax.grid(axis='y', linestyle='--', alpha=0.5)
