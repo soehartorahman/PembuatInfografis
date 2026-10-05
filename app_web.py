@@ -204,10 +204,21 @@ def format_jam_otomatis(jam_str):
     except Exception: return f"{jam_str} WITA"
 
 def dapatkan_warna_indikator(val, limits, colors):
-    if not limits: return "black"
-    for i in range(len(limits)-1):
-        if limits[i] <= val <= limits[i+1]: return colors[i]
-    return colors[-1]
+    if not limits or not colors: 
+        return "black"
+    try:
+        val = float(val)
+    except (ValueError, TypeError):
+        return "black"
+
+    for i in range(len(limits) - 1):
+        if limits[i] <= val <= limits[i+1]:
+            return colors[i]
+            
+    # Jika melebihi batas paling atas
+    if val > limits[-1]:
+        return colors[-1]
+    return colors[0]
 
 def draw_justified_himbauan_dynamic(draw, text, start_x, start_y, max_width, max_height, w_dasar, w_hl):
     target_font_size = 24  
@@ -369,9 +380,16 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                 df_valid = df_valid[pd.to_numeric(df_valid[col_pm1], errors='coerce').notnull()]
                 
                 hari_h = df_valid.iloc[-1]
-                colors_standard = ["#27ae60", "#2980b9", "#f1c40f"] 
-                lim_pm10 = [0, 50, 150, 350]
-                lim_pm25 = [0, 15.5, 55.4, 150.4]
+                colors_standard = [
+                    "#27ae60",  # Baik (Hijau)
+                    "#2980b9",  # Sedang (Biru)
+                    "#f1c40f",  # Tidak Sehat (Kuning)
+                    "#e74c3c",  # Sangat Tidak Sehat (Merah)
+                    "#8e44ad"   # Berbahaya (Ungu/Hitam)
+                ]
+
+                lim_pm10 = [0, 50, 150, 350, 420, 500]
+                lim_pm25 = [0, 15.5, 55.4, 150.4, 250.4, 500]
 
                 chart_pm10_path = os.path.join(BASE_DIR, 'chart_pm10.png')
                 chart_pm25_path = os.path.join(BASE_DIR, 'chart_pm25.png')
