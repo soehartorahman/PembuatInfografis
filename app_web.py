@@ -327,11 +327,11 @@ def hitung_kategori_pm10(nilai):
         
     if nilai <= 50:
         return "Baik"
-    elif nilai <= 100:
-        return "Sedang"
     elif nilai <= 150:
+        return "Sedang"
+    elif nilai <= 350:
         return "Tidak Sehat"
-    elif nilai <= 300:
+    elif nilai <= 420:
         return "Sangat Tidak Sehat"
     else:
         return "Berbahaya"
