@@ -10,6 +10,7 @@ from matplotlib.collections import LineCollection
 from matplotlib.colors import LinearSegmentedColormap
 from PIL import Image, ImageDraw, ImageFont
 import streamlit as st
+import requests
 
 # ==========================================
 # 1. KONFIGURASI HALAMAN WEB STREAMLIT
@@ -406,7 +407,7 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                 font_cuaca_besar   = get_font("Aileron-Regular.otf", 18)  
                 font_public_sans   = get_font("PublicSans-Bold.ttf", 18)
                 font_public_sans_s = get_font("PublicSans-Bold.ttf", 15)  
-                font_spartan_giant = get_font("LeagueSpartan-Bold.ttf", 150) 
+                font_spartan_giant = get_font("LeagueSpartan-Bold.ttf", 110) 
 
                 txt_tgl = str(hari_h[col_tanggal])
                 bbox_tgl = draw.textbbox((0, 0), txt_tgl, font=font_poppins)
@@ -629,4 +630,47 @@ if st.session_state['gambar_infografis'] is not None:
         mime="image/png",
         use_container_width=True
     )
+
+# ==========================================
+# 5. FUNGSI & TOMBOL KIRIM TELEGRAM
+# ==========================================
+
+# 1. Definisi Fungsi Kirim Telegram
+def kirim_ke_telegram(token, chat_id, pesan_teks, gambar_bytes):
+    try:
+        url_photo = f"https://api.telegram.org/bot{token}/sendPhoto"
+        files = {'photo': ('infografis.png', gambar_bytes, 'image/png')}
+        data = {
+            'chat_id': chat_id,
+            'caption': pesan_teks,
+            'parse_mode': 'Markdown'
+        }
+        res = requests.post(url_photo, data=data, files=files)
+        return res.json()
+    except Exception as e:
+        return {"ok": False, "description": str(e)}
+
+# 2. UI Tombol Kirim di Dashboard Streamlit
+if st.session_state['gambar_infografis'] is not None:
+    st.markdown("---")
+    st.subheader("📲 Kirim Langsung ke Channel Telegram")
+    
+    # Token & Chat ID milik kamu yang sudah dikonfigurasi:
+    TELEGRAM_TOKEN = "8874117089:AAF3nRjb4_aU1D04TJADhsX7v8Jn7_y7R28"
+    TELEGRAM_CHAT_ID = "-1004416837944"
+
+    if st.button("📤 KIRIM HASIL KE TELEGRAM", type="primary", use_container_width=True):
+        with st.spinner("Sedang mengunggah infografis ke Telegram..."):
+            hasil = kirim_ke_telegram(
+                TELEGRAM_TOKEN, 
+                TELEGRAM_CHAT_ID, 
+                st.session_state['narasi_terformed'], 
+                st.session_state['gambar_infografis']
+            )
+            
+            if hasil.get("ok"):
+                st.success("✅ Infografis dan narasi berhasil terkirim ke Channel Telegram!")
+                st.balloons()
+            else:
+                st.error(f"⚠️ Gagal mengirim ke Telegram: {hasil.get('description')}")
 
