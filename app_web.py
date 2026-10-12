@@ -147,14 +147,8 @@ def buat_grafik_conditional(df, col_name, batas_nilai, warna_list, output_name):
             y_start = y[i]
             y_end = y[i+1]
             
-            def dapatkan_warna_murni(val):
-                for b_idx in range(len(batas_nilai)-1):
-                    if batas_nilai[b_idx] <= val <= batas_nilai[b_idx+1]:
-                        return warna_list[b_idx]
-                return warna_list[-1]
-            
-            c_start = dapatkan_warna_murni(y_start)
-            c_end = dapatkan_warna_murni(y_end)
+            c_start = dapatkan_warna_indikator(y_start, batas_nilai, warna_list)
+            c_end = dapatkan_warna_indikator(y_end, batas_nilai, warna_list)
             
             cmap_lokal = LinearSegmentedColormap.from_list("lokal_kronologis", [c_start, c_end])
             x_seg = np.linspace(x[i], x[i+1], 30)
@@ -179,8 +173,8 @@ def buat_grafik_conditional(df, col_name, batas_nilai, warna_list, output_name):
         if batas_nilai and warna_list:
             for b_idx in range(len(batas_nilai)-1):
                 if batas_nilai[b_idx] <= val <= batas_nilai[b_idx+1]:
-                    pt_color = warna_list[b_idx]
-                    break
+                    pt_color = dapatkan_warna_indikator(val, batas_nilai, warna_list)
+                    
         ax.scatter(x[idx], val, color=pt_color, edgecolor='black', s=90, zorder=3)
         ax.text(x[idx], val + (max_y_val * 0.05), f"{int(val)}", ha='center', va='bottom', fontsize=11, weight='bold', color='black')
 
