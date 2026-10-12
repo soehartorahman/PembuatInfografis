@@ -1,5 +1,6 @@
 streamlit
-Pillow
 pandas
-requests
+numpy
 matplotlib
+pillow
+requests
