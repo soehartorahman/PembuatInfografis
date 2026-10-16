@@ -27,7 +27,7 @@ st.markdown("---")
 
 # Direktori Dasar Aset
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-BG_FILE = os.path.join(BASE_DIR, "background10th.png")
+BG_FILE = os.path.join(BASE_DIR, "background10thversion.png")
 FOLDER_ICON = os.path.join(BASE_DIR, "icons_cuaca")
 FOLDER_FONT = os.path.join(BASE_DIR, "fonts")
 
@@ -380,7 +380,7 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                     "#2980b9",  # Sedang (Biru)
                     "#f1c40f",  # Tidak Sehat (Kuning)
                     "#e74c3c",  # Sangat Tidak Sehat (Merah)
-                    "#000000"   # Berbahaya (Ungu/Hitam)
+                    "#000000"   # Berbahaya (Hitam)
                 ]
 
                 lim_pm10 = [0, 50, 150, 350, 420, 500]
