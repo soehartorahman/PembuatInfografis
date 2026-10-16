@@ -380,7 +380,7 @@ if st.button("🚀 GENERATE INFOGRAFIS ONLINE", type="primary", use_container_wi
                     "#2980b9",  # Sedang (Biru)
                     "#f1c40f",  # Tidak Sehat (Kuning)
                     "#e74c3c",  # Sangat Tidak Sehat (Merah)
-                    "#8e44ad"   # Berbahaya (Ungu/Hitam)
+                    "#000000"   # Berbahaya (Ungu/Hitam)
                 ]
 
                 lim_pm10 = [0, 50, 150, 350, 420, 500]
